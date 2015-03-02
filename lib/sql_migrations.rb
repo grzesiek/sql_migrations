@@ -25,7 +25,7 @@ module SqlMigrations
 
     def list_files
       Migration.find.each { |migration| puts migration }
-      Seed.find.each      { |seed| puts seed }
+      Seed.find.each      { |seed|      puts seed      }
     end
   end
 end

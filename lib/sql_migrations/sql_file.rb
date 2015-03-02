@@ -16,7 +16,13 @@ module SqlMigrations
     end
 
     def execute(db)
-      puts 'execute'
+      begin
+        db.transaction do
+          db.run @content
+        end
+      rescue
+        # TODO
+      end
     end
 
     def self.find(type)
