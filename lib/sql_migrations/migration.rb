@@ -1,27 +1,8 @@
 module SqlMigrations
-  class Migration
+  class Migration < SqlFile
 
     def self.find
-      migrations = []
-      Find.find(Dir.pwd) do |path|
-        if file_opts = File.basename(path).match(/(\d{8})_(\d{6})_(.*)?\.sql/)
-          # Only files within migrations directory are valid migrations
-          if File.basename(File.dirname(path)) == 'migrations'
-            migrations << self.new(path, date: file_opts[1],
-                                         time: file_opts[2],
-                                         name: file_opts[3])
-          end
-        end
-      end
-      migrations
-    end
-
-    def initialize(path, opts)
-      @date = opts[:date]
-      @time = opts[:time]
-      @name = opts[:name]
-      @path = opts[:path]
-      @content = IO.read(path)
+      super(:migrations)
     end
 
     def to_s
@@ -29,7 +10,8 @@ module SqlMigrations
     end
 
     def execute(db)
-      puts "[+] Running migration #{@name}, added #{@date}"
+      puts "[m] Running migration #{@name}, added #{@date}"
+      super
     end
   end
 end

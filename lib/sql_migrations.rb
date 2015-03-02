@@ -4,7 +4,9 @@ require 'find'
 
 require 'sql_migrations/version'
 require 'sql_migrations/database'
+require 'sql_migrations/sql_file'
 require 'sql_migrations/migration'
+require 'sql_migrations/seed'
 
 module SqlMigrations
   class << self
@@ -23,7 +25,7 @@ module SqlMigrations
 
     def list_files
       Migration.find.each { |migration| puts migration }
-      # Seed.find.each { |seed| puts seed }
+      Seed.find.each      { |seed| puts seed }
     end
   end
 end
