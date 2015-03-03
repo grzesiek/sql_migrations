@@ -1,8 +1,8 @@
 module SqlMigrations
   class Migration < SqlFile
 
-    def self.find
-      super(:migrations)
+    def self.find(db_name = nil)
+      super(db_name, :migrations)
     end
 
     def to_s

@@ -31,7 +31,7 @@ module SqlMigrations
 
     def seed_with_fixtures
       puts "[i] Seeding test database with fixtures"
-      Fixture.find(@name).each { |seed| seed.execute(@db) }
+      Fixture.find(@name).each { |fixture| fixture.execute(@db) }
     end
 
     private

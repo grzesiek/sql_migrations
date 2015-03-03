@@ -12,15 +12,11 @@ module SqlMigrations
     end
 
     def seed
-      databases_run do |db|
-        db.seed_database
-      end
+      databases_run { |db| db.seed_database      }
     end
 
     def seed_test
-      databases_run do |db|
-        db.seed_with_fixtures
-      end
+      databases_run { |db| db.seed_with_fixtures }
     end
 
     def list_files

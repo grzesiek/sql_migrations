@@ -1,8 +1,8 @@
 module SqlMigrations
   class Fixture < SqlFile
 
-    def self.find
-      super(:fixture)
+    def self.find(db_name = nil)
+      super(db_name, :fixture)
     end
 
     def to_s
