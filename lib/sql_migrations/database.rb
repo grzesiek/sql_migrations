@@ -37,24 +37,17 @@ module SqlMigrations
 
     private
     def install_table
-      # Check if migration and seed tables are present
-      unless @db.table_exists?(:sqlmigrations_migrations)
-        create_schema_table(:sqlmigrations_migrations)
-      end
-
-      unless @db.table_exists?(:sqlmigrations_seeds)
-        create_schema_table(:sqlmigrations_seeds)
-      end
-    end
-
-    def create_schema_table(table_name)
-      puts "[!] Installing `#{table_name}`"
-      @db.create_table(table_name) do
-        primary_key :id
-        DateTime :time
-        DateTime :executed
-        String   :name
-        index [ :time, :name ]
+      # Check if we have migrations_schema table present
+      unless @db.table_exists?(:sqlmigrations_schema)
+        puts "[!] Installing `sqlmigrations_schema`"
+        @db.create_table(:sqlmigrations_schema) do
+          primary_key :id
+          DateTime :time
+          DateTime :executed
+          String   :name
+          String   :type
+          index [ :time, :type ]
+        end
       end
     end
 
