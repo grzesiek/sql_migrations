@@ -1,12 +1,12 @@
 module SqlMigrations
   class Migration < SqlFile
 
-    def self.find(db_name = nil)
+    def self.find(db_name)
       super(db_name, :migrations)
     end
 
     def to_s
-      "Migration #{@name}, datetime: #{@date + @time}"
+      "Migration #{@name} for db: #{@db_name}, datetime: #{@date + @time}"
     end
 
     def execute(db)

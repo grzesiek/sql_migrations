@@ -20,9 +20,9 @@ module SqlMigrations
     end
 
     def list_files
-      Migration.find.each { |migration| puts migration }
-      Seed.find.each      { |seed|      puts seed      }
-      Fixture.find.each   { |fixture|   puts fixture   }
+      Migration.find(@databases).each { |migration| puts migration }
+      Seed.find(@databases).each      { |seed|      puts seed      }
+      Fixture.find(@databases).each   { |fixture|   puts fixture   }
     end
 
     private
@@ -37,6 +37,7 @@ module SqlMigrations
     def databases_run
       @databases.each do |db|
         db_options = @options[db.to_s][@env.to_s]
+        db_options.merge!(name: db)
         if db_options
           yield Database.new(db_options)
         else

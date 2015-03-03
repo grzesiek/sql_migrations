@@ -3,6 +3,7 @@ module SqlMigrations
 
     def initialize(options)
       @name = options[:name] || :default
+      return
       begin
         @db = Sequel.connect(adapter:  options['adapter'],
                              host:     options['host'],
@@ -21,7 +22,7 @@ module SqlMigrations
 
     def execute_migrations
       puts "[i] Executing migrations"
-      Migration.find(@name).each { |migration| migration.execute(@db) }
+      Migration.find(@name).each { |migration| puts "#{@name}: #{migration}" }
     end
 
     def seed_database
