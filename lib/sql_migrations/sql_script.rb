@@ -72,12 +72,13 @@ module SqlMigrations
     def is_new?
       schema = @database.schema_dataset
       last = schema.order(Sequel.asc(:time)).where(type: @type).last
-      unless last.nil?
+      is_new = schema.where(time: @datetime, type: @type).count == 0
+      if is_new && !last.nil?
         if last[:time] > @datetime
           raise "#{@type.capitalize} #{@name} has time BEFORE last one recorded !"
         end
       end
-      schema.where(time: @datetime, type: @type).count == 0
+      is_new
     end
 
     def on_success
