@@ -10,22 +10,23 @@ module SqlMigrations
       @path     = opts[:path]
       @db_name  = opts[:db_name]
       @content  = IO.read(path)
+      @type     = self.class.name.downcase.split('::').last
+      @datetime = (@date + @time).to_i
     end
 
     def execute(db)
       @database = db
       return unless is_new?
       begin
-        db.transaction do
-          time = Benchmark.measure do
+        @database.db.transaction do
+          @benchmark = Benchmark.measure do
             db.run @content
           end
         end
       rescue
-        puts "[-] Error while executing #{@name} !"
+        puts "[-] Error while executing #{@type} #{@name} !"
         raise
       else
-        puts time
         on_success
       end
     end
@@ -36,7 +37,7 @@ module SqlMigrations
         if !db_name.is_a? Array then db_name = [ db_name ] end
         file_date, file_time, file_name, file_db = self.file_options(db_name, type, path)
         next unless file_name
-        scripts << self.new(path, date: file_date,time: file_time, name: file_name, db_name: file_db)
+        scripts << self.new(path, date: file_date, time: file_time, name: file_name, db_name: file_db)
       end
       scripts.sort_by { |file| (file.date + file.time).to_i }
     end
@@ -65,7 +66,24 @@ module SqlMigrations
       end
 
       file_database = db_names.include?(dir.to_sym) ? dir : :default
-      return file_opts[0], file_opts[1], file_opts[2], file_database
+      return file_opts[1], file_opts[2], file_opts[3], file_database
+    end
+
+    def is_new?
+      schema = @database.schema_dataset
+      last = schema.order(Sequel.asc(:time)).where(type: @type).last
+      unless last.nil?
+        if last[:time] > @datetime
+          raise "#{@type.capitalize} #{@name} has time BEFORE last one recorded !"
+        end
+      end
+      schema.where(time: @datetime, type: @type).count == 0
+    end
+
+    def on_success
+      puts @benchmark
+      schema = @database.schema_dataset
+      schema.insert(time: @datetime, name: @name, type: @type, executed: DateTime.now)
     end
 
   end

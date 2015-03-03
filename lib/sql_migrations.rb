@@ -2,6 +2,7 @@ require 'sequel'
 require 'yaml'
 require 'find'
 require 'benchmark'
+require 'time'
 
 require 'sql_migrations/version'
 require 'sql_migrations/database'

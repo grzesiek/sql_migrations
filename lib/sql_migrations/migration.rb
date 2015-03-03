@@ -14,11 +14,8 @@ module SqlMigrations
     end
 
     private
-    def is_new?
-      TODO
-    end
-
     def on_success
+      super
     end
 
   end

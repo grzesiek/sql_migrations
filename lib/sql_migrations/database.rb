@@ -1,9 +1,11 @@
 module SqlMigrations
   class Database
 
+    SCHEMA_TABLE = :sqlmigrations_schema
+    attr_reader :db
+
     def initialize(options)
       @name = options[:name] || :default
-      return
       begin
         @db = Sequel.connect(adapter:  options['adapter'],
                              host:     options['host'],
@@ -22,27 +24,31 @@ module SqlMigrations
 
     def execute_migrations
       puts "[i] Executing migrations"
-      Migration.find(@name).each { |migration| puts "#{@name}: #{migration}" }
+      Migration.find(@name).each { |migration| migration.execute(self) }
     end
 
     def seed_database
       puts "[i] Seeding database"
-      Seed.find(@name).each { |seed| seed.execute(@db) }
+      Seed.find(@name).each { |seed| seed.execute(self) }
     end
 
     def seed_with_fixtures
       puts "[i] Seeding test database with fixtures"
-      Fixture.find(@name).each { |fixture| fixture.execute(@db) }
+      Fixture.find(@name).each { |fixture| fixture.execute(self) }
+    end
+
+    def schema_dataset
+      @db[SCHEMA_TABLE]
     end
 
     private
     def install_table
       # Check if we have migrations_schema table present
-      unless @db.table_exists?(:sqlmigrations_schema)
-        puts "[!] Installing `sqlmigrations_schema`"
-        @db.create_table(:sqlmigrations_schema) do
+      unless @db.table_exists?(SCHEMA_TABLE)
+        puts "[!] Installing `#{SCHEMA_TABLE}`"
+        @db.create_table(SCHEMA_TABLE) do
           primary_key :id
-          DateTime :time
+          Bignum   :time
           DateTime :executed
           String   :name
           String   :type
@@ -50,6 +56,7 @@ module SqlMigrations
         end
       end
     end
+
 
   end
 end
