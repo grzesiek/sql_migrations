@@ -20,7 +20,7 @@ module SqlMigrations
       begin
         @database.db.transaction do
           @benchmark = Benchmark.measure do
-            db.run @content
+            @database.db.run @content
           end
         end
       rescue
@@ -81,7 +81,8 @@ module SqlMigrations
     end
 
     def on_success
-      puts @benchmark
+      puts "[+] Successfully executed #{@type}, name: #{@name}"
+      puts "    Benchmark: #{@benchmark}"
       schema = @database.schema_dataset
       schema.insert(time: @datetime, name: @name, type: @type, executed: DateTime.now)
     end

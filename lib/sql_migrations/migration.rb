@@ -9,14 +9,5 @@ module SqlMigrations
       "Migration #{@name} for db: #{@db_name}, datetime: #{@date + @time}"
     end
 
-    def execute(db)
-      super
-    end
-
-    private
-    def on_success
-      super
-    end
-
   end
 end
