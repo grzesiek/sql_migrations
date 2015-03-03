@@ -1,5 +1,5 @@
 module SqlMigrations
-  class SqlFile
+  class SqlScript
 
     attr_reader :date, :time, :name
 

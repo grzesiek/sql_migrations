@@ -1,5 +1,5 @@
 module SqlMigrations
-  class Migration < SqlFile
+  class Migration < SqlScript
 
     def self.find(db_name)
       super(db_name, :migrations)
