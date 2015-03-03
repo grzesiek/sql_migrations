@@ -1,12 +1,15 @@
 require 'sequel'
 require 'yaml'
 require 'find'
+require 'benchmark'
 
 require 'sql_migrations/version'
 require 'sql_migrations/database'
+require 'sql_migrations/supervisor'
 require 'sql_migrations/sql_file'
 require 'sql_migrations/migration'
 require 'sql_migrations/seed'
+require 'sql_migrations/fixture'
 
 module SqlMigrations
   class << self
@@ -15,17 +18,12 @@ module SqlMigrations
     def load_tasks
       load "sql_migrations/tasks/migrate.rake"
       load "sql_migrations/tasks/seed.rake"
+      load "sql_migrations/tasks/seed_test.rake"
       load "sql_migrations/tasks/list.rake"
     end
 
     def load!(config_file)
-      ENV['ENV'] ||= "development"
-      @options = YAML::load_file(config_file)[ENV['ENV']]
-    end
-
-    def list_files
-      Migration.find.each { |migration| puts migration }
-      Seed.find.each      { |seed|      puts seed      }
+      @options = YAML::load_file(config_file)
     end
   end
 end

@@ -1,19 +1,8 @@
 module SqlMigrations
   class Database
 
-    class << self
-      def migrate
-        options = SqlMigrations.options
-        self.new(options).execute_migrations
-      end
-
-      def seed
-        options = SqlMigrations.options
-        self.new(options).seed_database
-      end
-    end
-
     def initialize(options)
+      @name = options[:name] || :default
       begin
         @db = Sequel.connect(adapter:  options['adapter'],
                              host:     options['host'],
@@ -32,26 +21,39 @@ module SqlMigrations
 
     def execute_migrations
       puts "[i] Executing migrations"
-      Migration.find.each { |migration| migration.execute(@db) }
+      Migration.find(@name).each { |migration| migration.execute(@db) }
     end
 
     def seed_database
       puts "[i] Seeding database"
-      Seed.find.each { |seed| seed.execute(@db) }
+      Seed.find(@name).each { |seed| seed.execute(@db) }
+    end
+
+    def seed_with_fixtures
+      puts "[i] Seeding test database with fixtures"
+      Fixture.find(@name).each { |seed| seed.execute(@db) }
     end
 
     private
     def install_table
-      # Check if we have `sqlmigrations_schema` table created
-      unless @db.table_exists?(:sqlmigrations_schema)
-        puts "[!] Installing `sqlmigrations_schema`"
-        @db.create_table(:sqlmigrations_schema) do
-          primary_key :id
-          DateTime :time, unique: true
-          DateTime :executed
-          String   :name
-          index [ :time, :name ]
-        end
+      # Check if migration and seed tables are present
+      unless @db.table_exists?(:sqlmigrations_migrations)
+        create_schema_table(:sqlmigrations_migrations)
+      end
+
+      unless @db.table_exists?(:sqlmigrations_seeds)
+        create_schema_table(:sqlmigrations_seeds)
+      end
+    end
+
+    def create_schema_table(table_name)
+      puts "[!] Installing `#{table_name}`"
+      @db.create_table(table_name) do
+        primary_key :id
+        DateTime :time
+        DateTime :executed
+        String   :name
+        index [ :time, :name ]
       end
     end
 

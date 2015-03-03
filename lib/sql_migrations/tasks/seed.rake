@@ -2,7 +2,7 @@ namespace :sqlmigrations do
   namespace :db do
     desc "Seed database"
     task :seed do
-      SqlMigrations::Database.seed
+      SqlMigrations::Supervisor.new.seed
     end
   end
 end

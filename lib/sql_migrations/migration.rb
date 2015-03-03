@@ -10,8 +10,16 @@ module SqlMigrations
     end
 
     def execute(db)
-      puts "[m] Running migration #{@name}, added #{@date}"
       super
     end
+
+    private
+    def is_new?
+      TODO
+    end
+
+    def on_success
+    end
+
   end
 end
