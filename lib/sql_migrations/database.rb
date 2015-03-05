@@ -7,12 +7,7 @@ module SqlMigrations
     def initialize(options)
       @name = options[:name] || :default
       begin
-        @db = Sequel.connect(adapter:  options['adapter'],
-                             host:     options['host'],
-                             database: options['database'],
-                             user:     options['username'],
-                             password: options['password'],
-                             test:     true)
+        @db = self.class.connect(options)
       rescue
         puts "[-] Could not connect to database using #{options['adapter']} adapter"
         raise
@@ -42,6 +37,16 @@ module SqlMigrations
     end
 
     private
+
+    def self.connect(options)
+      Sequel.connect(adapter:  options['adapter'],
+                     host:     options['host'],
+                     database: options['database'],
+                     user:     options['username'],
+                     password: options['password'],
+                     test:     true)
+    end
+
     def install_table
       # Check if we have migrations_schema table present
       unless @db.table_exists?(SCHEMA_TABLE)
@@ -56,7 +61,6 @@ module SqlMigrations
         end
       end
     end
-
 
   end
 end
