@@ -9,7 +9,7 @@ module SqlMigrations
       @name     = opts[:name]
       @path     = opts[:path]
       @db_name  = opts[:db_name]
-      @content  = IO.read(path)
+      @content  = File.read(path)
       @type     = self.class.name.downcase.split('::').last
       @datetime = (@date + @time).to_i
     end
