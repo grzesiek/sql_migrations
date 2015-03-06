@@ -1,6 +1,7 @@
 # sql-migrations
 
 [![Gem Version](https://badge.fury.io/rb/sql_migrations.svg)](http://badge.fury.io/rb/sql_migrations)
+[![Build Status](https://travis-ci.org/grzesiek/sql-migrations.svg?branch=master)](https://travis-ci.org/grzesiek/sql-migrations)
 
 Simple standalone migrations you can use with plain SQL.
 
