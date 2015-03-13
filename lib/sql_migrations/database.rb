@@ -2,7 +2,7 @@ module SqlMigrations
   class Database
 
     SCHEMA_TABLE = :sqlmigrations_schema
-    attr_reader :db
+    attr_reader :db, :name
 
     def initialize(options)
       @name = options[:name] || :default

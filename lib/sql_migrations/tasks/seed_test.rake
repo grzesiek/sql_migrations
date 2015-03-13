@@ -3,7 +3,7 @@ namespace :sqlmigrations do
     namespace :test do
       desc "Seed test database with fixtures"
       task :seed do
-        SqlMigrations::Supervisor.new.seed_test
+        SqlMigrations.seed_test
       end
     end
   end
