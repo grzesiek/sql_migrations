@@ -16,7 +16,7 @@ module SqlMigrations
 
     def execute(db)
       @database = db
-      return unless is_new?
+      return false unless is_new?
       begin
         @database.db.transaction do
           @benchmark = Benchmark.measure do
@@ -27,7 +27,7 @@ module SqlMigrations
         puts "[-] Error while executing #{@type} #{@name} !"
         raise
       else
-        on_success
+        true & on_success
       end
     end
 
