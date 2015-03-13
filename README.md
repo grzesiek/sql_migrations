@@ -22,9 +22,11 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 1.  First - install Ruby environment, with `rbenv` or `rvm`.
 2.  If your project is not using ruby, create your Gemfile:
 
-        source 'https://rubygems.org'
-        gem 'mysql2'
-        gem 'sql_migrations'
+    ```ruby
+    source 'https://rubygems.org'
+    gem 'mysql2'
+    gem 'sql_migrations'
+    ```
 
     It is possible to use all database adapters that are supported by `Sequel`. 
     Adapters supported by `Sequel`, by now, are:
@@ -36,60 +38,66 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
     If you are using PostgreSQL use
 
-        gem 'pg'
+    ```ruby
+    gem 'pg'
+    ```
 
 3.  Run `bundle install`
 
 4.  Create database config file in `db/config/databases.yml`
 
-        default:
-          development:
-            adapter: mysql2
-            encoding: utf8
-            database: test_db_dev
-            username: test_user
-            password: test_pass
-            host: 192.168.1.1
-            test:
-            adapter: mysql2
-            encoding: utf8
-            database: test_db_test
-            username: test_user
-            password: test_pass
-            host: 192.168.1.1
-          
-          production:
-            adapter: mysql2
-            encoding: utf8
-            database: test_db_prod
-            username: test_user
-            password: test_pass
-            host: 192.168.1.100
-          second_db:
-          development:
-            adapter: mysql2
-            encoding: utf8
-            database: second_db_dev
-            username: test_user
-            password: test_pass
-            host: 127.0.0.1
-            test:
-            adapter: mysql2
-            encoding: utf8
-            database: second_db_test
-            username: test_user
-            password: test_pass
-            host: 127.0.0.1
+    ```yaml
+    default:
+      development:
+        adapter: mysql2
+        encoding: utf8
+        database: test_db_dev
+        username: test_user
+        password: test_pass
+        host: 192.168.1.1
+        test:
+        adapter: mysql2
+        encoding: utf8
+        database: test_db_test
+        username: test_user
+        password: test_pass
+        host: 192.168.1.1
+      
+      production:
+        adapter: mysql2
+        encoding: utf8
+        database: test_db_prod
+        username: test_user
+        password: test_pass
+        host: 192.168.1.100
+      second_db:
+      development:
+        adapter: mysql2
+        encoding: utf8
+        database: second_db_dev
+        username: test_user
+        password: test_pass
+        host: 127.0.0.1
+        test:
+        adapter: mysql2
+        encoding: utf8
+        database: second_db_test
+        username: test_user
+        password: test_pass
+        host: 127.0.0.1
+    ```
 
-    Note that you need to define `default` databases set.
+    Note that you need to define `default` database configuration.
 
 4.  Migrations/seed/fixtures are executed using rake tasks. So you will need to create `Rakefile`:
 
-        require 'bundler'
-        Bundler.require
+    ```ruby
+    require 'bundler'
+    Bundler.require
 
-        SqlMigrations.load!('db/config/databases.yml')
-        SqlMigrations.load_tasks
+    SqlMigrations::Config.load!('db/config/databases.yml')
+    SqlMigrations.load_tasks
+    ```
 
 5.  It's ready !
   
@@ -176,7 +184,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
 ## TODO
 
-1.  Tests
+1.  More tests
 2.  Generator for `databases.yml`
 3.  Generator for migrations
 

@@ -15,13 +15,13 @@ describe 'sql scripts' do
       f.puts "INSERT INTO second_test_table(col_int2, col_str2) VALUES(456, 'test_string2')"
     end
     File.open('/fixtures/20150305_154010_test_test_seed', 'w') do |f|
-      f.puts "INSERT INTO first_test_table(col_int1, col_str1) VALUES(2123, '2test_string1')"
-      f.puts "INSERT INTO second_test_table(col_int2, col_str2) VALUES(2456, '2test_string2')"
+      f.puts "INSERT INTO first_test2_table(col_int1, col_str1) VALUES(2123, '2test_string1')"
+      f.puts "INSERT INTO second_test2_table(col_int2, col_str2) VALUES(2456, '2test_string2')"
     end
   end
 
   it 'should be found' do
-    expect { SqlMigrations::Supervisor.new.list_files }.to \
+    expect { SqlMigrations.list_files }.to \
       output("Migration first_test_migration for db: default, datetime: 20150305154010\n" +
              "Migration second_test_migration for db: default, datetime: 20150305154011\n" +
              "Seed data test_seed, datetime: 20150305154010\n").to_stdout
