@@ -10,10 +10,10 @@ This gives you possibility to execute migrations, seed datebase (on production a
 
 ## Why ?
 
-This is particularly useful in old projects that don't have migration support, and you really want to use Continues Delivery strategy. 
+This is particularly useful in old projects that don't have migration support, and you really want to use Continuous Delivery strategy. 
 Without migrations you wouldn't be able to setup your test environment for automated testing (functional tests, unit tests, integration tests).
 
-For example, if you work on old Zend 1 project, and you want to take benefit from using Continues Deployment/Continues Integration mechanisms - you may find this project useful.
+For example, if you work on old Zend 1 project, and you want to take benefit from using Continuous Deployment/Continuous Integration mechanisms - you may find this project useful.
 
 ## Install
 
