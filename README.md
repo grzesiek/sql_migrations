@@ -70,7 +70,8 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
         username: test_user
         password: test_pass
         host: 192.168.1.100
-      second_db:
+        
+    second_db:
       development:
         adapter: mysql2
         encoding: utf8
