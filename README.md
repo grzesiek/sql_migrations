@@ -55,14 +55,13 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
         username: test_user
         password: test_pass
         host: 192.168.1.1
-        test:
+      test:
         adapter: mysql2
         encoding: utf8
         database: test_db_test
         username: test_user
         password: test_pass
         host: 192.168.1.1
-      
       production:
         adapter: mysql2
         encoding: utf8
@@ -90,7 +89,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
     Note that you need to define `default` database configuration.
 
-4.  Migrations/seed/fixtures are executed using rake tasks. So you will need to create `Rakefile`:
+4.  Migrations/seed/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
 
     ```ruby
     require 'bundler'
