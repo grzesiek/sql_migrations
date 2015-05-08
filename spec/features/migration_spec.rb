@@ -4,6 +4,7 @@ describe 'migration' do
     File.open('/migrations/20150305_154010_test_migration.sql', 'w') do |f|
       f.puts "CREATE TABLE test_table(col_int INTEGER, col_str STRING)"
     end
+    allow(SqlMigrations::Config).to receive(:options) { { "default" => { "development" => {}}} }
     @migration = SqlMigrations::Migration.find([ :default ]).first
   end
 

@@ -1,11 +1,10 @@
 module SqlMigrations
   class Config
-
     class << self
       attr_reader :options
 
       def load!(config_file)
-        @options = YAML::load_file(config_file)
+        @options = YAML.load(ERB.new(File.new(config_file).read).result)
       end
     end
 
@@ -33,6 +32,5 @@ module SqlMigrations
       end
       databases
     end
-
   end
 end

@@ -58,10 +58,10 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
       test:
         adapter: mysql2
         encoding: utf8
-        database: test_db_test
-        username: test_user
-        password: test_pass
-        host: 192.168.1.1
+        database: <%= ENV['DB_NAME'] %>
+        username: <%= ENV['DB_USER'] %>
+        password: <%= ENV['DB_PASS'] %>
+        host: <%=     ENV['DB_HOST'] %>
       production:
         adapter: mysql2
         encoding: utf8
@@ -78,7 +78,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
         username: test_user
         password: test_pass
         host: 127.0.0.1
-        test:
+      test:
         adapter: mysql2
         encoding: utf8
         database: second_db_test
@@ -88,6 +88,8 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
     ```
 
     Note that you need to define `default` database configuration.
+
+    As shown above, it is possible to use ERB-like syntax to use environment variables in config.
 
 4.  Migrations/seed/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
 

@@ -18,6 +18,7 @@ describe 'sql scripts' do
       f.puts "INSERT INTO first_test2_table(col_int1, col_str1) VALUES(2123, '2test_string1')"
       f.puts "INSERT INTO second_test2_table(col_int2, col_str2) VALUES(2456, '2test_string2')"
     end
+    allow(SqlMigrations::Config).to receive(:options) { { "default" => { "development" => {}}} }
   end
 
   it 'should be found' do
