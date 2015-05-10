@@ -101,6 +101,33 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
     SqlMigrations.load_tasks
     ```
 
+    You can also create Rake tasks by yourself:
+
+    ```ruby
+    require 'sql_migrations'
+    SqlMigrations::Config.load!('databases.yml')
+
+    namespace :db do
+      desc 'Migrate database'
+      task :migrate do
+        puts '[i] Running migrations ...'
+        SqlMigrations.migrate
+      end
+
+      desc 'Seed database'
+      task :seed do
+        puts '[i] Seeding databases ...'
+        SqlMigrations.seed
+      end
+
+      desc 'Prepare databases -- migrate and seed'
+      task :prepare do
+        Rake::Task['db:migrate'].invoke
+        Rake::Task['db:seed'].invoke
+      end
+    end
+    ```
+
 5.  It's ready !
   
 
