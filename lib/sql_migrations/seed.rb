@@ -6,7 +6,7 @@ module SqlMigrations
     end
 
     def to_s
-      "Seed data #{@name}, datetime: #{@date + @time}"
+      "Seed data #{@name} for `#{@db_name}` database, datetime: #{@date + @time}"
     end
 
   end

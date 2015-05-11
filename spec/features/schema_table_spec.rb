@@ -6,7 +6,7 @@ describe 'schema table in database' do
   it 'should be created if it does not exist' do
     expect do
       @database = SqlMigrations::Database.new(name: :default, 'adapter' => :sqlite)
-    end.to output("[+] Connected to database using sqlite adapter\n" +
+    end.to output("[+] Connected to `default` database using sqlite adapter\n" +
                   "[!] Installing `sqlmigrations_schema`\n").to_stdout
     expect(@database.db.table_exists?(:sqlmigrations_schema)).to be true
   end
@@ -22,7 +22,7 @@ describe 'schema table in database' do
     end
     expect do
       @database = SqlMigrations::Database.new(name: :default, 'adapter' => :sqlite)
-    end.to output("[+] Connected to database using sqlite adapter\n").to_stdout
+    end.to output("[+] Connected to `default` database using sqlite adapter\n").to_stdout
     expect(@database.db.table_exists?(:sqlmigrations_schema)).to be true
   end
 end

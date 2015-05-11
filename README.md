@@ -87,9 +87,10 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
         host: 127.0.0.1
     ```
 
-    Note that you need to define `default` database configuration.
-
     As shown above, it is possible to use ERB-like syntax to use environment variables in config.
+
+    `default` database configuration is optional, nonetheless if supplied it will not be necessary to create additional subdirectory to store migrations (look below).
+
 
 4.  Migrations/seed/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
 
@@ -169,7 +170,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
         db/
           migrations/
-            20150303_180100_test_migration.sql
+            20150303_180100_test_migration_for_default_database.sql
             second_db/
               20150303_180101_test_migration_for_second_db.sql
 

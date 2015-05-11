@@ -5,14 +5,14 @@ module SqlMigrations
     attr_reader :db, :name
 
     def initialize(options)
-      @name = options[:name] || :default
+      @name = options[:name]
       begin
         @db = self.class.connect(options)
       rescue
-        puts "[-] Could not connect to database using #{options['adapter']} adapter"
+        puts "[-] Could not connect to `#{@name}` database using #{options['adapter']} adapter"
         raise
       else
-        puts "[+] Connected to database using #{options['adapter']} adapter"
+        puts "[+] Connected to `#{@name}` database using #{options['adapter']} adapter"
       end
       install_table
     end

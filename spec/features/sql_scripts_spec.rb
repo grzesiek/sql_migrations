@@ -18,14 +18,29 @@ describe 'sql scripts' do
       f.puts "INSERT INTO first_test2_table(col_int1, col_str1) VALUES(2123, '2test_string1')"
       f.puts "INSERT INTO second_test2_table(col_int2, col_str2) VALUES(2456, '2test_string2')"
     end
-    allow(SqlMigrations::Config).to receive(:options) { { "default" => { "development" => {}}} }
+
+    Dir.mkdir('/migrations/test2_db')
+    File.open('/migrations/test2_db/20150511_144000_second_db_test_migration.sql', 'w') do |f|
+      f.puts "CREATE TABLE second_db_test_table(col_int1 INTEGER, col_str1 STRING)"
+    end
+
+    Dir.mkdir('/migrations/default')
+    File.open('/migrations/default//20150511_144100_default_db_test2_migration.sql', 'w') do |f|
+      f.puts "CREATE TABLE default_db_test2_table(col_int1 INTEGER, col_str1 STRING)"
+    end
+
+    allow(SqlMigrations::Config).to receive(:options) { { 'default' => { 'development' => {}},
+                                                          'test2_db' => { 'development' => {}}} }
   end
 
   it 'should be found' do
     expect { SqlMigrations.list_files }.to \
-      output("Migration first_test_migration for db: default, datetime: 20150305154010\n" +
-             "Migration second_test_migration for db: default, datetime: 20150305154011\n" +
-             "Seed data test_seed, datetime: 20150305154010\n").to_stdout
+      output("Migration first_test_migration for `default` database, datetime: 20150305154010\n" +
+             "Migration second_test_migration for `default` database, datetime: 20150305154011\n" +
+             "Migration default_db_test2_migration for `default` database, datetime: 20150511144100\n" +
+             "Seed data test_seed for `default` database, datetime: 20150305154010\n" +
+             "Migration second_db_test_migration for `test2_db` database, datetime: 20150511144000\n"
+            ).to_stdout
   end
 
 end

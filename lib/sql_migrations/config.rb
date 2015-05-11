@@ -26,11 +26,7 @@ module SqlMigrations
 
     private
     def get_databases_from_config
-      databases = @options.map { |k, v| k.to_sym }
-      unless databases.include?(:default)
-        raise "Default database configuration not found !"
-      end
-      databases
+      @options.map { |k, v| k.to_sym }
     end
   end
 end

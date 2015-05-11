@@ -6,7 +6,7 @@ module SqlMigrations
     end
 
     def to_s
-      "Migration #{@name} for db: #{@db_name}, datetime: #{@date + @time}"
+      "Migration #{@name} for `#{@db_name}` database, datetime: #{@date + @time}"
     end
 
   end
