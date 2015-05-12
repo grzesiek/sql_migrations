@@ -8,7 +8,7 @@ describe 'schema table in database' do
       @database = SqlMigrations::Database.new(name: :default, 'adapter' => :sqlite)
     end.to output("[+] Connected to `default` database using sqlite adapter\n" +
                   "[!] Installing `sqlmigrations_schema`\n").to_stdout
-    expect(@database.db.table_exists?(:sqlmigrations_schema)).to be true
+    expect(@database.driver.table_exists?(:sqlmigrations_schema)).to be true
   end
 
   it 'should not be create if it exists' do
@@ -23,6 +23,6 @@ describe 'schema table in database' do
     expect do
       @database = SqlMigrations::Database.new(name: :default, 'adapter' => :sqlite)
     end.to output("[+] Connected to `default` database using sqlite adapter\n").to_stdout
-    expect(@database.db.table_exists?(:sqlmigrations_schema)).to be true
+    expect(@database.driver.table_exists?(:sqlmigrations_schema)).to be true
   end
 end

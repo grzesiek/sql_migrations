@@ -18,9 +18,9 @@ module SqlMigrations
       @database = db
       return false unless is_new?
       begin
-        @database.db.transaction do
+        @database.driver.transaction do
           @benchmark = Benchmark.measure do
-            @database.db.run @content
+            @database.driver.run @content
           end
         end
       rescue

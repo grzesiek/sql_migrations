@@ -2,13 +2,13 @@ module SqlMigrations
   class Database
 
     SCHEMA_TABLE = :sqlmigrations_schema
-    attr_reader :db, :name
+    attr_reader :name, :driver
 
     def initialize(options)
       @name    = options[:name]
       @adapter = options['adapter']
       begin
-        @db = self.class.connect(options)
+        @driver = self.class.connect(options)
       rescue
         puts "[-] Could not connect to `#{@name}` database using #{@adapter} adapter"
         raise
@@ -49,7 +49,7 @@ module SqlMigrations
     end
 
     def schema_dataset
-      @db[SCHEMA_TABLE]
+      @driver[SCHEMA_TABLE]
     end
 
     private
@@ -65,9 +65,9 @@ module SqlMigrations
 
     def install_table
       # Check if we have migrations_schema table present
-      unless @db.table_exists?(SCHEMA_TABLE)
+      unless @driver.table_exists?(SCHEMA_TABLE)
         puts "[!] Installing `#{SCHEMA_TABLE}`"
-        @db.create_table(SCHEMA_TABLE) do
+        @driver.create_table(SCHEMA_TABLE) do
           primary_key :id
           Bignum   :time
           DateTime :executed
