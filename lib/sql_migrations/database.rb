@@ -5,31 +5,47 @@ module SqlMigrations
     attr_reader :db, :name
 
     def initialize(options)
-      @name = options[:name]
+      @name    = options[:name]
+      @adapter = options['adapter']
       begin
         @db = self.class.connect(options)
       rescue
-        puts "[-] Could not connect to `#{@name}` database using #{options['adapter']} adapter"
+        puts "[-] Could not connect to `#{@name}` database using #{@adapter} adapter"
         raise
       else
-        puts "[+] Connected to `#{@name}` database using #{options['adapter']} adapter"
+        puts "[+] Connected to `#{@name}` database using #{@adapter} adapter"
       end
       install_table
     end
 
     def execute_migrations
-      puts "[i] Executing migrations"
-      Migration.find(@name).each { |migration| migration.execute(self) }
+      migrations = Migration.find(@name)
+      unless migrations.empty?
+        puts "[i] Executing migrations for `#{@name}` database"
+        migrations.each { |migration| migration.execute(self) }
+      else
+        puts "[i] No new migrations for `#{@name}` database"
+      end
     end
 
     def seed_database
-      puts "[i] Seeding database"
-      Seed.find(@name).each { |seed| seed.execute(self) }
+      seeds = Seed.find(@name)
+      unless seeds.empty?
+        puts "[i] Seeding `#{@name}` database"
+        seeds.each { |seed| seed.execute(self) }
+      else
+        puts "[i] No new seeds for `#{@name}` database"
+      end
     end
 
     def seed_with_fixtures
-      puts "[i] Seeding test database with fixtures"
-      Fixture.find(@name).each { |fixture| fixture.execute(self) }
+      fixtures = Fixture.find(@name)
+      unless fixtures.empty?
+        puts "[i] Seeding `#{@name}` database with fixtures"
+        fixtures.each { |fixture| fixture.execute(self) }
+      else
+        puts "[i] No new fixturess for `#{@name}` database"
+      end
     end
 
     def schema_dataset
@@ -37,9 +53,9 @@ module SqlMigrations
     end
 
     private
-
     def self.connect(options)
       Sequel.connect(adapter:  options['adapter'],
+                     encoding: options['encoding'],
                      host:     options['host'],
                      database: options['database'],
                      user:     options['username'],
