@@ -6,7 +6,7 @@ module SqlMigrations
 
     def initialize(options)
       @name    = options[:name]
-      @adapter = options['adapter']
+      @adapter = options[:adapter]
       begin
         @driver = self.class.connect(options)
       rescue
@@ -54,12 +54,12 @@ module SqlMigrations
 
     private
     def self.connect(options)
-      Sequel.connect(adapter:  options['adapter'],
-                     encoding: options['encoding'],
-                     host:     options['host'],
-                     database: options['database'],
-                     user:     options['username'],
-                     password: options['password'],
+      Sequel.connect(adapter:  options[:adapter],
+                     encoding: options[:encoding],
+                     host:     options[:host],
+                     database: options[:database],
+                     user:     options[:username],
+                     password: options[:password],
                      test:     true)
     end
 
