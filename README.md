@@ -47,44 +47,51 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 4.  Create database config file in `db/config/databases.yml`
 
     ```yaml
-    default:
-      development:
-        adapter: mysql2
-        encoding: utf8
-        database: test_db_dev
-        username: test_user
-        password: test_pass
-        host: 192.168.1.1
-      test:
-        adapter: mysql2
-        encoding: utf8
-        database: <%= ENV['DB_NAME'] %>
-        username: <%= ENV['DB_USER'] %>
-        password: <%= ENV['DB_PASS'] %>
-        host: <%=     ENV['DB_HOST'] %>
-      production:
-        adapter: mysql2
-        encoding: utf8
-        database: test_db_prod
-        username: test_user
-        password: test_pass
-        host: 192.168.1.100
-        
-    second_db:
-      development:
-        adapter: mysql2
-        encoding: utf8
-        database: second_db_dev
-        username: test_user
-        password: test_pass
-        host: 127.0.0.1
-      test:
-        adapter: mysql2
-        encoding: utf8
-        database: second_db_test
-        username: test_user
-        password: test_pass
-        host: 127.0.0.1
+    production:
+      databases:
+        default:
+          adapter: mysql2
+          encoding: utf8
+          database: default_db_prod
+          username: prod_user
+          password: prod_pass
+          host: 192.168.1.1
+
+    development:
+      databases:
+        default:
+          adapter: mysql2
+          encoding: utf8
+          database: default_db_dev
+          username: dev_user
+          password: dev_pass
+          host: 127.0.0.1
+
+        second_db:
+          adapter: mysql2
+          encoding: utf8
+          database: second_db_dev
+          username: test_user
+          password: test_pass
+          host: 127.0.0.1
+
+    test:
+      databases:
+        default:
+          adapter: mysql2
+          encoding: utf8
+          database: <%= ENV['DB_DEFAULT_NAME'] %>
+          username: <%= ENV['DB_DEFAULT_USER'] %>
+          password: <%= ENV['DB_DEFAULT_PASS'] %>
+          host:     <%= ENV['DB_DEFAULT_HOST'] %>
+
+        second_db:
+          adapter: mysql2
+          encoding: utf8
+          database: <%= ENV['DB_SECOND_NAME'] %>
+          username: <%= ENV['DB_SECOND_USER'] %>
+          password: <%= ENV['DB_SECOND_PASS'] %>
+          host:     <%= ENV['DB_SECOND_HOST'] %>
     ```
 
     As shown above, it is possible to use ERB-like syntax to use environment variables in config.

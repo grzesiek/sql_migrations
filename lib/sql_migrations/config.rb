@@ -1,41 +1,39 @@
 module SqlMigrations
   class Config
     class << self
-      attr_reader :options
 
-      def load!(config_file)
-        yaml_hash = YAML.load(ERB.new(File.new(config_file).read).result)
-        @options = symbolize_keys(yaml_hash)
+      attr_reader :env
+
+      def load!(config_file, env = nil)
+        @env = (env || ENV['ENV'] || ENV['RAKE_ENV'] || :development).to_sym
+        config = get_config_for_env_from_file(config_file)
+        @databases = config[:databases]
+        @options   = config[:options]
+        { databases: @databases, options: @options }
       end
-    end
 
-    def initialize
-      @env = (ENV['ENV'] ||= "development").to_sym
-      @options = self.class.options
-      @databases = get_databases_from_config
-    end
-
-    def databases
-      @databases.map do |db|
-        db_options = @options[db][@env.to_sym]
-        unless db_options
-          raise "Configuration for #{db} in environment #{@env} not found !"
+      def databases
+        if @databases.nil? || @databases.empty?
+          raise RuntimeError, 'No configuration done !' if @databases.nil?
         end
-        db_options.merge!(name: db)
+        @databases
       end
-    end
 
-    private
-    def get_databases_from_config
-      @options.map { |k, v| k.to_sym }
-    end
+      private
+      def get_config_for_env_from_file(file)
+        yaml_hash = YAML.load(ERB.new(File.new(file).read).result)
+        config = symbolize_keys(yaml_hash)[@env]
+        raise LoadError, "No configuration for `#{@env}` environment found !" unless config
+        config
+      end
 
-    def self.symbolize_keys(hash)
-      hash.inject({}) do |acc, (key, value)|
-        new_key = key.is_a?(String) ? key.to_sym : key
-        new_value = value.is_a?(Hash) ? symbolize_keys(value) : value
-        acc[new_key] = new_value
-        acc
+      def symbolize_keys(hash)
+        hash.inject({}) do |acc, (key, value)|
+          new_key = key.is_a?(String) ? key.to_sym : key
+          new_value = value.is_a?(Hash) ? symbolize_keys(value) : value
+          acc[new_key] = new_value
+          acc
+        end
       end
     end
   end

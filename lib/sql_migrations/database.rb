@@ -4,8 +4,8 @@ module SqlMigrations
     SCHEMA_TABLE = :sqlmigrations_schema
     attr_reader :name, :driver
 
-    def initialize(options)
-      @name    = options[:name]
+    def initialize(name, options)
+      @name    = name
       @adapter = options[:adapter]
       begin
         @driver = self.class.connect(options)

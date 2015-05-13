@@ -4,7 +4,7 @@ describe 'migration' do
     File.open('/migrations/20150305_154010_test_migration.sql', 'w') do |f|
       f.puts "CREATE TABLE test_table(col_int INTEGER, col_str STRING)"
     end
-    allow(SqlMigrations::Config).to receive(:options) { { "default" => { "development" => {}}} }
+    allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {}}} }
     @migration = SqlMigrations::Migration.find([ :default ]).first
   end
 
@@ -26,7 +26,7 @@ describe 'migration' do
 
   it 'should be properly executed' do
     $stdout = StringIO.new
-    database = SqlMigrations::Database.new(name: :default, 'adapter' => :sqlite)
+    database = SqlMigrations::Database.new(:default, adapter: :sqlite)
     @migration.execute(database)
     expect(@sqlite_db.table_exists?(:test_table)).to be true
     expect(@sqlite_db[:test_table].columns).to include(:col_int)

@@ -29,8 +29,7 @@ describe 'sql scripts' do
       f.puts "CREATE TABLE default_db_test2_table(col_int1 INTEGER, col_str1 STRING)"
     end
 
-    allow(SqlMigrations::Config).to receive(:options) {{ default:  { development: {}},
-                                                         test2_db: { development: {}}}}
+    allow(SqlMigrations::Config).to receive(:databases) {{ default: {}, test2_db: {} }}
   end
 
   it 'should be found' do

@@ -36,8 +36,7 @@ module SqlMigrations
     end
 
     def list_files
-      Config.new.databases.each do |db_config|
-        name = db_config[:name]
+      Config.databases.each do |name, config|
         Migration.find(name).each { |migration| puts migration }
         Seed.find(name).each      { |seed|      puts seed      }
         Fixture.find(name).each   { |fixture|   puts fixture   }
@@ -46,8 +45,8 @@ module SqlMigrations
 
     private
     def databases
-      Config.new.databases.each do |db_config|
-        db = Database.new(db_config)
+      Config.databases.each do |name, config|
+        db = Database.new(name, config)
         yield db
       end
     end
