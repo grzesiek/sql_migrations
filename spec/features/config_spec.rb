@@ -23,7 +23,7 @@ describe 'loadable configuration file' do
 
   it 'should parse database correctly' do
     database_config = SqlMigrations::Config.databases[:default]
-    expect(database_config).to eq ({ adapter: "sqlite3", database: "test_database" })
+    expect(database_config).to eq(adapter: 'sqlite3', database: 'test_database')
   end
 
   after do

@@ -1,6 +1,7 @@
 module SqlMigrations
+  # Seed class
+  #
   class Seed < SqlScript
-
     def self.find(db_name)
       super(db_name, :seed)
     end
@@ -8,6 +9,5 @@ module SqlMigrations
     def to_s
       "Seed data #{@name} for `#{@db_name}` database, datetime: #{@date + @time}"
     end
-
   end
 end

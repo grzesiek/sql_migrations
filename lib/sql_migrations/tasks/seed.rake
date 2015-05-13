@@ -1,6 +1,6 @@
 namespace :sqlmigrations do
   namespace :db do
-    desc "Seed database"
+    desc 'Seed database'
     task :seed do
       SqlMigrations.seed
     end

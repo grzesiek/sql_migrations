@@ -1,7 +1,8 @@
 module SqlMigrations
+  # Configuration class
+  #
   class Config
     class << self
-
       attr_reader :env
 
       def load!(config_file, env = nil)
@@ -14,12 +15,13 @@ module SqlMigrations
 
       def databases
         if @databases.nil? || @databases.empty?
-          raise RuntimeError, 'No configuration done !' if @databases.nil?
+          raise 'No configuration done !' if @databases.nil?
         end
         @databases
       end
 
       private
+
       def get_config_for_env_from_file(file)
         yaml_hash = YAML.load(ERB.new(File.new(file).read).result)
         config = symbolize_keys(yaml_hash)[@env]
@@ -28,11 +30,10 @@ module SqlMigrations
       end
 
       def symbolize_keys(hash)
-        hash.inject({}) do |acc, (key, value)|
+        hash.each_with_object({}) do |(key, value), new_hash|
           new_key = key.is_a?(String) ? key.to_sym : key
           new_value = value.is_a?(Hash) ? symbolize_keys(value) : value
-          acc[new_key] = new_value
-          acc
+          new_hash[new_key] = new_value
         end
       end
     end

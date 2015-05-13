@@ -2,10 +2,10 @@ describe 'migration' do
   before do
     Dir.mkdir('/migrations')
     File.open('/migrations/20150305_154010_test_migration.sql', 'w') do |f|
-      f.puts "CREATE TABLE test_table(col_int INTEGER, col_str STRING)"
+      f.puts 'CREATE TABLE test_table(col_int INTEGER, col_str STRING)'
     end
-    allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {}}} }
-    @migration = SqlMigrations::Migration.find([ :default ]).first
+    allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {} } } }
+    @migration = SqlMigrations::Migration.find([:default]).first
   end
 
   it 'should be found and initialized' do

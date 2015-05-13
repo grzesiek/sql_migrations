@@ -1,6 +1,7 @@
 module SqlMigrations
+  # Class that represents database gem will connect to
+  #
   class Database
-
     SCHEMA_TABLE = :sqlmigrations_schema
     attr_reader :name, :driver
 
@@ -20,7 +21,7 @@ module SqlMigrations
 
     def execute_migrations
       migrations = Migration.find(@name)
-      unless migrations.empty?
+      if !migrations.empty?
         puts "[i] Executing migrations for `#{@name}` database"
         migrations.each { |migration| migration.execute(self) }
       else
@@ -30,7 +31,7 @@ module SqlMigrations
 
     def seed_database
       seeds = Seed.find(@name)
-      unless seeds.empty?
+      if !seeds.empty?
         puts "[i] Seeding `#{@name}` database"
         seeds.each { |seed| seed.execute(self) }
       else
@@ -40,7 +41,7 @@ module SqlMigrations
 
     def seed_with_fixtures
       fixtures = Fixture.find(@name)
-      unless fixtures.empty?
+      if !fixtures.empty?
         puts "[i] Seeding `#{@name}` database with fixtures"
         fixtures.each { |fixture| fixture.execute(self) }
       else
@@ -53,6 +54,7 @@ module SqlMigrations
     end
 
     private
+
     def self.connect(options)
       Sequel.connect(adapter:  options[:adapter],
                      encoding: options[:encoding],
@@ -65,18 +67,18 @@ module SqlMigrations
 
     def install_table
       # Check if we have migrations_schema table present
-      unless @driver.table_exists?(SCHEMA_TABLE)
-        puts "[!] Installing `#{SCHEMA_TABLE}`"
-        @driver.create_table(SCHEMA_TABLE) do
-          primary_key :id
-          Bignum   :time
-          DateTime :executed
-          String   :name
-          String   :type
-          index [ :time, :type ]
-        end
+      return if @driver.table_exists?(SCHEMA_TABLE)
+      puts "[!] Installing `#{SCHEMA_TABLE}`"
+      @driver.create_table(SCHEMA_TABLE) do
+        # rubocop:disable Style/SingleSpaceBeforeFirstArg
+        primary_key :id
+        Bignum      :time
+        DateTime    :executed
+        String      :name
+        String      :type
+        index      [:time, :type]
+        # rubocop:enable Style/SingleSpaceBeforeFirstArg
       end
     end
-
   end
 end
