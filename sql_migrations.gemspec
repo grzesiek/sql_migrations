@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Grzegorz Bizon']
   spec.email         = ['grzegorz.bizon@ntsn.pl']
   spec.summary       = 'Simple standalone migrations you can use with plain SQL'
-  spec.homepage      = 'http://github.com/grzesiek/sql-migrations'
+  spec.homepage      = 'http://github.com/grzesiek/sql_migrations'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split('\x0')
