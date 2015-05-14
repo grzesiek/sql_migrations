@@ -1,11 +1,11 @@
-# sql-migrations
+# sql_migrations
 
 [![Gem Version](https://badge.fury.io/rb/sql_migrations.svg)](http://badge.fury.io/rb/sql_migrations)
-[![Build Status](https://travis-ci.org/grzesiek/sql-migrations.svg?branch=master)](https://travis-ci.org/grzesiek/sql-migrations)
+[![Build Status](https://travis-ci.org/grzesiek/sql_migrations.svg?branch=master)](https://travis-ci.org/grzesiek/sql_migrations)
 
 Simple standalone migrations you can use with plain SQL.
 
-This gives you possibility to execute migrations, seed datebase (on production and in test environment with fixtures) in non-Ruby pojects.
+This gives you possibility to execute migrations, seed datebase (on production and in test environment with fixtures) in non-Ruby projects.
 `sql-migrations` can work with multiple different databases, and support many db adapters.
 
 ## Why ?
@@ -56,6 +56,8 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           username: prod_user
           password: prod_pass
           host: 192.168.1.1
+      options:
+        separator: ;
 
     development:
       databases:
@@ -66,7 +68,6 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           username: dev_user
           password: dev_pass
           host: 127.0.0.1
-
         second_db:
           adapter: mysql2
           encoding: utf8
@@ -74,6 +75,8 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           username: test_user
           password: test_pass
           host: 127.0.0.1
+      options:
+        separator: ;
 
     test:
       databases:
@@ -84,7 +87,6 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           username: <%= ENV['DB_DEFAULT_USER'] %>
           password: <%= ENV['DB_DEFAULT_PASS'] %>
           host:     <%= ENV['DB_DEFAULT_HOST'] %>
-
         second_db:
           adapter: mysql2
           encoding: utf8
@@ -92,11 +94,15 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           username: <%= ENV['DB_SECOND_USER'] %>
           password: <%= ENV['DB_SECOND_PASS'] %>
           host:     <%= ENV['DB_SECOND_HOST'] %>
+      options:
+        separator: ;
     ```
 
     As shown above, it is possible to use ERB-like syntax to use environment variables in config.
 
     `default` database configuration is optional, nonetheless if supplied it will not be necessary to create additional subdirectory to store migrations (look below).
+
+    If you have multi-statement migrations you should provide `separator` configuration variable in `options` block. `options` key is optional in YAML.
 
 
 4.  Migrations/seed/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
@@ -141,7 +147,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
 ## Usage
 
-1.  Valid migration/seed/fixture file names match agains regexp `/(\d{8})_(\d{6})_(.*)?\.sql/`. So valid filenames would be:
+1.  Valid migration/seed/fixture file names match against regexp `/(\d{8})_(\d{6})_(.*)?\.sql/`. So valid filenames would be:
 
 
         20150303_180100_test_migration.sql
@@ -150,7 +156,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
     You can put plain SQL into that files.
 
-2.  It is possible to create migration files, seed files and fixtures inside followig directory structure:
+2.  It is possible to create migration files, seed files and fixtures inside following directory structure:
 
         db/
           migrations/
@@ -207,7 +213,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
         # this will list all migrations/seed files/fixtures that where found
         rake sqlmigration:files:list    
 
-6.  Enviroment variables
+6.  Environment variables
 
     If you want to run migration on different database (for example test) specify ENV:
 
@@ -227,4 +233,4 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
 ## License
 
-This is free sofware licensed under MIT license, see LICENSE file
+This is free software licensed under MIT license, see LICENSE file
