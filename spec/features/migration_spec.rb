@@ -5,7 +5,7 @@ describe 'migration' do
       f.puts 'CREATE TABLE test_table(col_int INTEGER, col_str STRING)'
     end
     allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {} } } }
-    @migration = SqlMigrations::Migration.find([:default]).first
+    @migration = SqlMigrations::Migration.find(:default).first
   end
 
   it 'should be found and initialized' do

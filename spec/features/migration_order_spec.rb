@@ -8,7 +8,7 @@ describe 'migrations valid order support engine' do
     end
 
     @database  = SqlMigrations::Database.new(:default, adapter: :sqlite)
-    migration = SqlMigrations::Migration.find([:default]).first
+    migration = SqlMigrations::Migration.find(:default).first
     migration.execute(@database)
 
     File.open('/migrations/20150305_154011_test2_migration.sql', 'w') do |f|
@@ -17,7 +17,7 @@ describe 'migrations valid order support engine' do
     File.open('/migrations/20150305_154012_test3_migration.sql', 'w') do |f|
       f.puts 'CREATE TABLE test_table3(col_int3 INTEGER, col_str3 STRING)'
     end
-    @migrations = SqlMigrations::Migration.find([:default])
+    @migrations = SqlMigrations::Migration.find(:default)
   end
 
   it 'should find all migrations' do
