@@ -70,6 +70,7 @@ module SqlMigrations
 
     def on_success
       puts "[+] Successfully executed #{@type}, name: #{@name}"
+      puts "    #{@type.capitalize} file: #{@date}_#{@time}_#{@name}.sql"
       puts "    Benchmark: #{@benchmark}"
       schema = @database.schema_dataset
       schema.insert(time: @datetime, name: @name, type: @type, executed: DateTime.now)
