@@ -12,18 +12,26 @@ describe 'loadable configuration file' do
       f.puts '    default:'
       f.puts '      adapter: sqlite3'
       f.puts '      database: <%= ENV["DB_NAME"] %>'
+      f.puts '  options:'
+      f.puts '    separator: ;'
     end
     ENV['DB_NAME'] = 'test_database'
     SqlMigrations::Config.load! 'databases.yml'
   end
 
   it 'should use environment variables in config' do
-    expect(SqlMigrations::Config.databases[:default][:database]).to eq 'test_database'
+    databases = SqlMigrations::Config.databases
+    expect(databases[:default][:database]).to eq 'test_database'
   end
 
   it 'should parse database correctly' do
-    database_config = SqlMigrations::Config.databases[:default]
-    expect(database_config).to eq(adapter: 'sqlite3', database: 'test_database')
+    databases = SqlMigrations::Config.databases[:default]
+    expect(databases).to eq(adapter: 'sqlite3', database: 'test_database')
+  end
+
+  it 'should parse options correctly' do
+    options = SqlMigrations::Config.options
+    expect(options[:separator]).to eq ';'
   end
 
   after do

@@ -14,13 +14,27 @@ module SqlMigrations
       end
 
       def databases
-        if @databases.nil? || @databases.empty?
-          raise 'No configuration done !' if @databases.nil?
-        end
-        @databases
+        get_config_required(:@databases)
+      end
+
+      def options
+        get_config_optional(:@options)
       end
 
       private
+
+      def get_config_required(config_variable)
+        config_value = instance_variable_get(config_variable)
+        if config_value.nil? || config_value.empty?
+          raise "No configuration for `#{config_variable.to_s[1..-1]}` !"
+        end
+        config_value
+      end
+
+      def get_config_optional(config_variable)
+        config_value = instance_variable_get(config_variable)
+        (config_value.nil? || config_value.empty?) ? {} : config_value
+      end
 
       def get_config_for_env_from_file(file)
         yaml_hash = YAML.load(ERB.new(File.new(file).read).result)

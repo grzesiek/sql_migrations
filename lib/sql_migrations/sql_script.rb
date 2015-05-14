@@ -5,22 +5,23 @@ module SqlMigrations
     attr_reader :date, :time, :name
 
     def initialize(content, opts)
-      @content  = content
-      @date     = opts[:date]
-      @time     = opts[:time]
-      @name     = opts[:name]
-      @db_name  = opts[:db_name]
-      @type     = self.class.name.downcase.split('::').last
-      @datetime = (@date + @time).to_i
+      @content   = content
+      @date      = opts[:date]
+      @time      = opts[:time]
+      @name      = opts[:name]
+      @db_name   = opts[:db_name]
+      @type      = self.class.name.downcase.split('::').last
+      @datetime  = (@date + @time).to_i
     end
 
     def execute(db)
       @database = db
       return false unless new?
+      driver = @database.driver
       begin
-        @database.driver.transaction do
+        driver.transaction do
           @benchmark = Benchmark.measure do
-            @database.driver.run @content
+            statements.each { |query| driver.run(query) }
           end
         end
       rescue
@@ -28,6 +29,17 @@ module SqlMigrations
         raise
       else
         true & on_success
+      end
+    end
+
+    def statements
+      separator = Config.options[:separator]
+      if separator
+        statements = @content.split(separator)
+        statements.collect!(&:strip)
+        statements.reject(&:empty?)
+      else
+        [@content]
       end
     end
 
