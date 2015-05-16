@@ -24,6 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.31.0'
   spec.add_dependency             'bundler', '~> 1.7'
   spec.add_dependency             'rake',    '~> 10.0'
-  spec.add_dependency             'sequel',  '~> 4.19.0'
+  spec.add_dependency             'sequel',  '~> 4.22.0'
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 end
