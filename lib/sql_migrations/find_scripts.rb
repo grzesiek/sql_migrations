@@ -14,6 +14,8 @@ module SqlMigrations
         files
       end
 
+      private
+
       def match_file(db_dir, type, path)
         # parent_dir/base_dir/filename_that_matches_regexp.sql
         _filename, base_dir, parent_dir  = path.split(File::SEPARATOR).last(3).reverse
