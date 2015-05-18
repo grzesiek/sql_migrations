@@ -105,7 +105,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
     If you have multi-statement migrations you should provide `separator` configuration variable in `options` block. `options` key is optional in YAML.
 
 
-4.  Migrations/seed/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
+4.  Migrations/seeds/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
 
     ```ruby
     require 'bundler'
@@ -147,7 +147,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
 ## Usage
 
-1.  Valid migration/seed/fixture file names match against regexp `/(\d{8})_(\d{6})_(.*)?\.sql/`. So valid filenames would be:
+1.  Valid migration/seeds/fixture file names match against regexp `/(\d{8})_(\d{6})_(.*)?\.sql/`. So valid filenames would be:
 
 
         20150303_180100_test_migration.sql
@@ -163,7 +163,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
             20150303_180100_test_migration.sql
           fixtures/
             20150303_180100_fixture1.sql
-          seed/
+          seeds/
             20150303_180100_whatever_description_of_seed.sql
 
     If you want to use multiple databases, create also database directories:
@@ -175,7 +175,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           fixtures/
             default/
             second_db/
-          seed/
+          seeds/
             default/
             second_db/
 

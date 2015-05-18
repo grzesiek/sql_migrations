@@ -25,7 +25,7 @@ module SqlMigrations
         return nil unless file_parameters
 
         # Only files that lay in specific directory structure will do
-        file_database = file_match_directories(parent_dir, base_dir, db_dir, type)
+        file_database = file_match_directories(parent_dir, base_dir, db_dir, "#{type}s")
         return nil unless file_database
 
         { date: file_parameters[1], time: file_parameters[2],

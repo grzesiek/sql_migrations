@@ -3,7 +3,7 @@ module SqlMigrations
   #
   class Migration < SqlScript
     def self.find(db_name)
-      super(db_name, :migrations)
+      super(db_name, :migration)
     end
 
     def to_s
