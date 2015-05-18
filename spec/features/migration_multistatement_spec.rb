@@ -15,7 +15,6 @@ describe 'multistatement migration' do
   end
 
   it 'should be properly executed' do
-    $stdout = StringIO.new
     database = SqlMigrations::Database.new(:default, adapter: :sqlite)
     @migration.execute(database)
     expect(@sqlite_db.table_exists?(:multi_test_table1)).to be true

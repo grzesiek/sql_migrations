@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3', '~> 1.3.10'
   spec.add_development_dependency 'memfs',   '~> 0.4.3'
   spec.add_development_dependency 'rubocop', '~> 0.31.0'
+  spec.add_development_dependency 'simplecov', '~> 0.10.0'
   spec.add_dependency             'bundler', '~> 1.7'
   spec.add_dependency             'rake',    '~> 10.0'
   spec.add_dependency             'sequel',  '~> 4.22.0'

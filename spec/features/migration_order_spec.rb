@@ -1,7 +1,6 @@
 describe 'migrations valid order support engine' do
   before do
     allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {} } } }
-    $stdout = StringIO.new
     Dir.mkdir('/migrations')
     File.open('/migrations/20150305_154010_test_migration.sql', 'w') do |f|
       f.puts 'CREATE TABLE test_table(col_int INTEGER, col_str STRING)'
