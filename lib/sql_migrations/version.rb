@@ -1,5 +1,5 @@
 # SqlMigrations
 #
 module SqlMigrations
-  VERSION = '2.1.1'
+  VERSION = '2.2.1'
 end

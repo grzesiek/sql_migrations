@@ -1,17 +1,10 @@
 module SqlMigrations
   # SqlScript class
   #
-  class SqlScript
-    attr_reader :date, :time, :name
-
-    def initialize(content, opts)
-      @content   = content
-      @date      = opts[:date]
-      @time      = opts[:time]
-      @name      = opts[:name]
-      @db_name   = opts[:db_name]
-      @type      = self.class.name.downcase.split('::').last
-      @datetime  = (@date + @time).to_i
+  class SqlScript < ScriptFile
+    def initialize(path, database_name, type)
+      super
+      @datetime = (@date.to_s + @time.to_s).to_i
     end
 
     def execute(db)
@@ -35,22 +28,20 @@ module SqlMigrations
     def statements
       separator = Config.options[:separator]
       if separator
-        statements = @content.split(separator)
+        statements = content.split(separator)
         statements.collect!(&:strip)
         statements.reject(&:empty?)
       else
-        [@content]
+        [content]
       end
     end
 
-    def self.find(db_name, type)
-      files = FindScripts.find(db_name, type)
-      scripts = files.map do |parameters|
-        path = parameters.delete(:path)
-        content = File.read(path)
-        new(content, parameters)
+    def self.find(database_name, type)
+      scripts = []
+      Find.find(Dir.pwd) do |path|
+        candidate = new(path, database_name, type)
+        scripts << candidate if candidate.valid?
       end
-
       scripts.sort_by { |file| (file.date + file.time).to_i }
     end
 
