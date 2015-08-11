@@ -42,10 +42,28 @@ module SqlMigrations
         candidate = new(path, database_name, type)
         scripts << candidate if candidate.valid?
       end
+
+      raise_exception_if_duplicates_present(scripts, type)
+
       scripts.sort_by { |file| (file.date + file.time).to_i }
     end
 
     private
+
+    def self.raise_exception_if_duplicates_present(scripts, type)
+      duplicates = find_duplicates(scripts)
+      files = scripts.map do |script|
+        script.path if duplicates.include?(script.date + script.time)
+      end
+
+      raise "Duplicate timestamps for #{type}s: #{files.compact.join(', ')}" unless
+            duplicates.empty?
+    end
+
+    def self.find_duplicates(scripts)
+      scripts.map { |s| s.date + s.time }.group_by { |e| e }
+        .select { |_k, v| v.size > 1 }.keys
+    end
 
     def new?
       schema = @database.schema_dataset

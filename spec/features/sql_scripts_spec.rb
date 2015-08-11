@@ -43,5 +43,13 @@ describe 'sql scripts' do
              "Migration second_db_test_migration for `test2_db` database, datetime: 20150511144000\n"
             ).to_stdout
   end
+
+  it 'should raise an error if two files of same type with same timestamp are present' do
+    File.open('/migrations/default/20150511_144100_duplicated_timestamp_migration.sql', 'w') do |f|
+      f.puts 'CREATE TABLE duplicated_migration(col_int1 INTEGER)'
+    end
+
+    expect { SqlMigrations.list_files }.to raise_error(RuntimeError, /Duplicate timestamps for migrations: .*/)
+  end
 end
 # rubocop:enable Metrics/LineLength
