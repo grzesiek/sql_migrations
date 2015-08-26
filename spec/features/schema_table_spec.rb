@@ -19,7 +19,7 @@ describe 'schema table in database' do
       DateTime    :executed
       String      :name
       String      :type
-      index      [:time, :type]
+      index       [:time, :type]
       # rubocop:enable Style/SingleSpaceBeforeFirstArg
     end
     expect do

@@ -15,7 +15,7 @@ module SqlMigrations
     end
 
     def valid?
-      [@name,  @time, @date, @database, directories?].all?
+      [@name, @time, @date, @database, directories?].all?
     end
 
     def content

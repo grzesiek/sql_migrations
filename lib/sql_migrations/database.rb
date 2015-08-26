@@ -49,7 +49,7 @@ module SqlMigrations
       end
     end
 
-    def schema_dataset
+    def history
       @driver[SCHEMA_TABLE]
     end
 
@@ -76,7 +76,7 @@ module SqlMigrations
         DateTime    :executed
         String      :name
         String      :type
-        index      [:time, :type]
+        index       [:time, :type]
         # rubocop:enable Style/SingleSpaceBeforeFirstArg
       end
     end
