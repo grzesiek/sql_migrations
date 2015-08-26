@@ -33,11 +33,11 @@ describe 'sql scripts' do
 
     it 'should be found' do
       expect { SqlMigrations.scripts }.to \
-        output("Migration first_test_migration for `default` database, datetime: 20150305154010\n" \
-               "Migration second_test_migration for `default` database, datetime: 20150305154011\n" \
-               "Migration default_db_test2_migration for `default` database, datetime: 20150511144100\n" \
-               "Seed data test_seed for `default` database, datetime: 20150305154010\n" \
-               "Migration second_db_test_migration for `test2_db` database, datetime: 20150511144000\n"
+        output("Migration `/migrations/20150305_154010_first_test_migration.sql` for `default` database\n" \
+               "Migration `/migrations/20150305_154011_second_test_migration.sql` for `default` database\n" \
+               "Migration `/migrations/default/20150511_144100_default_db_test2_migration.sql` for `default` database\n" \
+               "Seed `/seeds/20150305_154010_test_seed.sql` for `default` database\n" \
+               "Migration `/migrations/test2_db/20150511_144000_second_db_test_migration.sql` for `test2_db` database\n"
               ).to_stdout
     end
 
@@ -63,7 +63,7 @@ describe 'sql scripts' do
 
     it 'should not find .*sw? files' do
       expect { SqlMigrations.scripts }
-        .to output("Migration test_migration for `default` database, datetime: 20150511144100\n")
+        .to output("Migration `/migrations/20150511_144100_test_migration.sql` for `default` database\n")
         .to_stdout
     end
   end

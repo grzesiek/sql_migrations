@@ -62,6 +62,10 @@ module SqlMigrations
       end
     end
 
+    def to_s
+      "#{@type.capitalize} `#{@path}` for `#{@file.database}` database"
+    end
+
     private
 
     def new?
