@@ -1,9 +1,9 @@
-require 'bundler/setup'
-require 'memfs'
 require 'simplecov'
+require 'memfs'
+require 'pp' # `superclass mismatch for class File` workaround
 
 SimpleCov.start
-Bundler.require
+require 'sql_migrations'
 
 RSpec.configure do |config|
   config.profile_examples = 2

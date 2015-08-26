@@ -1,10 +1,15 @@
+require 'forwardable'
+
 module SqlMigrations
   # SqlScript class
   #
-  class SqlScript < ScriptFile
-    def initialize(path, database_name, type)
-      super
-      @datetime = (@date.to_s + @time.to_s).to_i
+  class Script
+    extend Forwardable
+    delegate [:name, :date, :time, :datetime,
+              :type, :content, :path] => :@file
+
+    def initialize(file)
+      @file = file
     end
 
     def execute(db)
@@ -39,13 +44,12 @@ module SqlMigrations
     def self.find(database_name, type)
       scripts = []
       Find.find(Dir.pwd) do |path|
-        candidate = new(path, database_name, type)
-        scripts << candidate if candidate.valid?
+        file = File.new(path, database_name, type)
+        scripts << new(file) if file.valid?
       end
 
       raise_exception_if_duplicates_present(scripts, type)
-
-      scripts.sort_by { |file| (file.date + file.time).to_i }
+      scripts.sort_by(&:datetime)
     end
 
     private
@@ -67,22 +71,23 @@ module SqlMigrations
 
     def new?
       schema = @database.schema_dataset
-      last = schema.order(Sequel.asc(:time)).where(type: @type).last
-      is_new = schema.where(time: @datetime, type: @type).count == 0
+      last = schema.order(Sequel.asc(:time)).where(type: @file.type).last
+      is_new = schema.where(time: @file.datetime, type: @file.type).count == 0
       if is_new && !last.nil?
-        if last[:time] > @datetime
-          raise "#{@type.capitalize} #{@name} has time BEFORE last one recorded !"
+        if last[:time] > @file.datetime
+          raise "#{@file.type.capitalize} #{@file.name} has time BEFORE last one recorded !"
         end
       end
       is_new
     end
 
     def on_success
-      puts "[+] Successfully executed #{@type}, name: #{@name}"
-      puts "    #{@type.capitalize} file: #{@date}_#{@time}_#{@name}.sql"
+      puts "[+] Successfully executed #{@file.type}, name: #{@file.name}"
+      puts "    #{@file.type.capitalize} file: #{@file.date}_#{@file.time}_#{@file.name}.sql"
       puts "    Benchmark: #{@benchmark}"
       schema = @database.schema_dataset
-      schema.insert(time: @datetime, name: @name, type: @type, executed: DateTime.now)
+      schema.insert(time: @file.datetime, name: @file.name,
+                    type: @file.type, executed: DateTime.now)
     end
   end
 end
