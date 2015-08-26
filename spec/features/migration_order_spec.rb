@@ -6,7 +6,7 @@ describe 'migrations valid order support engine' do
       f.puts 'CREATE TABLE test_table(col_int INTEGER, col_str STRING)'
     end
 
-    @database  = SqlMigrations::Database.new(:default, adapter: :sqlite)
+    @database = SqlMigrations::Database.new(:default, adapter: :sqlite)
     migration = SqlMigrations::Migration.find(:default).first
     migration.execute(@database)
 
