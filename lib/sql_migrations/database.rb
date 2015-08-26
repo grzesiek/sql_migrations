@@ -1,3 +1,5 @@
+require 'sequel'
+
 module SqlMigrations
   # Class that represents database gem will connect to
   #

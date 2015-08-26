@@ -1,10 +1,3 @@
-require 'sequel'
-require 'yaml'
-require 'find'
-require 'benchmark'
-require 'time'
-require 'erb'
-
 require 'sql_migrations/version'
 require 'sql_migrations/database'
 require 'sql_migrations/config'

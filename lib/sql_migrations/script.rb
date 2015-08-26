@@ -1,4 +1,7 @@
-require 'forwardable'
+require 'sequel'
+require 'find'
+require 'benchmark'
+require 'time'
 
 module SqlMigrations
   # SqlScript class

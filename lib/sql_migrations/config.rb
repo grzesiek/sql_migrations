@@ -1,3 +1,6 @@
+require 'yaml'
+require 'erb'
+
 module SqlMigrations
   # Configuration module
   #
