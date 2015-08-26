@@ -1,6 +1,6 @@
 describe 'no loadable configuration file' do
   it 'should raise error when config is not loaded' do
-    expect { SqlMigrations.list_files }.to raise_error RuntimeError
+    expect { SqlMigrations.scripts }.to raise_error RuntimeError
   end
 end
 

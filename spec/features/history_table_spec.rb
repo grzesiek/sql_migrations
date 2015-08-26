@@ -1,4 +1,4 @@
-describe 'schema table in database' do
+describe 'history table in database' do
   before do
     allow(SqlMigrations::Config).to receive(:databases) { { default: {} } }
   end
@@ -7,7 +7,7 @@ describe 'schema table in database' do
     expect do
       @database = SqlMigrations::Database.new(:default, adapter: :sqlite)
     end.to output("[+] Connected to `default` database using sqlite adapter\n" \
-                  "[!] Installing `sqlmigrations_schema`\n").to_stdout
+                  "[!] Installing `sqlmigrations_schema` history table\n").to_stdout
     expect(@database.driver.table_exists?(:sqlmigrations_schema)).to be true
   end
 

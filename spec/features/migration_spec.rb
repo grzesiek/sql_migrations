@@ -26,7 +26,7 @@ describe 'migration' do
 
   it 'should be properly executed' do
     database = SqlMigrations::Database.new(:default, adapter: :sqlite)
-    database.execute_migrations
+    database.migrate
     expect(@sqlite_db.table_exists?(:test_table)).to be true
     expect(@sqlite_db[:test_table].columns).to include(:col_int)
     expect(@sqlite_db[:test_table].columns).to include(:col_str)

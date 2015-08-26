@@ -5,7 +5,7 @@
 
 Simple standalone migrations you can use with plain SQL.
 
-This gives you possibility to execute migrations, seed datebase (on production and in test environment with fixtures) in non-Ruby projects.
+This gives you possibility to execute migrations, seed datebase (on production and in test environment) in non-Ruby projects.
 `sql-migrations` can work with multiple different databases, and support many db adapters.
 
 ## Why ?
@@ -105,14 +105,14 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
     If you have multi-statement migrations you should provide `separator` configuration variable in `options` block. `options` key is optional in YAML.
 
 
-4.  Migrations/seeds/fixtures can be executed using rake tasks. So you will need to create `Rakefile`:
+4.  Migrations/seeds can be executed using rake tasks. So you will need to create `Rakefile`:
 
     ```ruby
     require 'bundler'
     Bundler.require
 
     SqlMigrations::Config.load!('db/config/databases.yml')
-    SqlMigrations.load_tasks
+    SqlMigrations.load_tasks!
     ```
 
     You can also create Rake tasks by yourself:
@@ -147,22 +147,19 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
 ## Usage
 
-1.  Valid migration/seeds/fixture file names match against regexp `/(\d{8})_(\d{6})_(.*)?\.sql/`. So valid filenames would be:
+1.  Valid migration/seeds file names match against regexp `/(\d{8})_(\d{6})_(.*)?\.sql/`. So valid filenames would be:
 
 
         20150303_180100_test_migration.sql
         20150303_180100_whatever_description_of_seed.sql
-        20150303_180100_fixture1.sql
 
     You can put plain SQL into that files.
 
-2.  It is possible to create migration files, seed files and fixtures inside following directory structure:
+2.  It is possible to create migration files and seed files inside following directory structure:
 
         db/
           migrations/
             20150303_180100_test_migration.sql
-          fixtures/
-            20150303_180100_fixture1.sql
           seeds/
             20150303_180100_whatever_description_of_seed.sql
 
@@ -172,14 +169,11 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
           migrations/
             default/
             second_db/
-          fixtures/
-            default/
-            second_db/
           seeds/
             default/
             second_db/
 
-    `default/` directory is optional, you can put migrations/seed data/fixtures for default database in base directories:
+    `default/` directory is optional, you can put migrations/seed data for default database in base directories:
 
         db/
           migrations/
@@ -197,8 +191,7 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
 
         rake sqlmigrations:db:migrate    # Run migrations
         rake sqlmigrations:db:seed       # Seed database
-        rake sqlmigrations:db:test:seed  # Seed test database with fixtures
-        rake sqlmigrations:files:list    # List found migration and seed files
+        rake sqlmigrations:db:scripts    # List all scripts found
 
 
 5.  Then, run tasks:
@@ -210,15 +203,15 @@ For example, if you work on old Zend 1 project, and you want to take benefit fro
         # this will seed database with initial data
         rake sqlmigrations:db:seed 
 
-        # this will list all migrations/seed files/fixtures that where found
-        rake sqlmigration:files:list    
+        # this will list all migrations/seed files that where found
+        rake sqlmigration:db:scripts
 
 6.  Environment variables
 
     If you want to run migration on different database (for example test) specify ENV:
 
         ENV=test rake sqlmigrations:db:migrate
-        ENV=test rake sqlmigrations:db:test:seed
+        ENV=test rake sqlmigrations:db:seed
 
     or in production:
 

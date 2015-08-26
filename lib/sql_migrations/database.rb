@@ -4,7 +4,7 @@ module SqlMigrations
   # Class that represents database gem will connect to
   #
   class Database
-    SCHEMA_TABLE = :sqlmigrations_schema
+    HISTORY_TABLE = :sqlmigrations_schema
     attr_reader :name, :driver
 
     def initialize(name, options)
@@ -21,38 +21,28 @@ module SqlMigrations
       install_table
     end
 
-    def execute_migrations
+    def migrate
       migrations = Migration.find(@name)
       if !migrations.empty?
         puts "[i] Executing migrations for `#{@name}` database"
         migrations.each { |migration| migration.execute(self) }
       else
-        puts "[i] No new migrations for `#{@name}` database"
+        puts "[i] No migrations for `#{@name}` database"
       end
     end
 
-    def seed_database
+    def seed
       seeds = Seed.find(@name)
       if !seeds.empty?
         puts "[i] Seeding `#{@name}` database"
         seeds.each { |seed| seed.execute(self) }
       else
-        puts "[i] No new seeds for `#{@name}` database"
-      end
-    end
-
-    def seed_with_fixtures
-      fixtures = Fixture.find(@name)
-      if !fixtures.empty?
-        puts "[i] Seeding `#{@name}` database with fixtures"
-        fixtures.each { |fixture| fixture.execute(self) }
-      else
-        puts "[i] No new fixturess for `#{@name}` database"
+        puts "[i] No seeds for `#{@name}` database"
       end
     end
 
     def history
-      @driver[SCHEMA_TABLE]
+      @driver[HISTORY_TABLE]
     end
 
     private
@@ -68,10 +58,10 @@ module SqlMigrations
     end
 
     def install_table
-      # Check if we have migrations_schema table present
-      return if @driver.table_exists?(SCHEMA_TABLE)
-      puts "[!] Installing `#{SCHEMA_TABLE}`"
-      @driver.create_table(SCHEMA_TABLE) do
+      return if @driver.table_exists?(HISTORY_TABLE)
+
+      puts "[!] Installing `#{HISTORY_TABLE}` history table"
+      @driver.create_table(HISTORY_TABLE) do
         # rubocop:disable Style/SingleSpaceBeforeFirstArg
         primary_key :id
         Bignum      :time

@@ -2,7 +2,6 @@
 describe 'sql scripts' do
   before do
     Dir.mkdir('/migrations')
-    Dir.mkdir('/fixtures')
     Dir.mkdir('/seeds')
 
     File.open('/migrations/20150305_154010_first_test_migration.sql', 'w') do |f|
@@ -14,10 +13,6 @@ describe 'sql scripts' do
     File.open('/seeds/20150305_154010_test_seed.sql', 'w') do |f|
       f.puts 'INSERT INTO first_test_table(col_int1, col_str1) VALUES(123, "test_string1")'
       f.puts 'INSERT INTO second_test_table(col_int2, col_str2) VALUES(456, "test_string2")'
-    end
-    File.open('/fixtures/20150518_154012_test_fixture.sql', 'w') do |f|
-      f.puts 'INSERT INTO first_test2_table(col_int1, col_str1) VALUES(2123, "2test_string1")'
-      f.puts 'INSERT INTO second_test2_table(col_int2, col_str2) VALUES(2456, "2test_string2")'
     end
 
     Dir.mkdir('/migrations/test2_db')
@@ -34,12 +29,11 @@ describe 'sql scripts' do
   end
 
   it 'should be found' do
-    expect { SqlMigrations.list_files }.to \
+    expect { SqlMigrations.scripts }.to \
       output("Migration first_test_migration for `default` database, datetime: 20150305154010\n" \
              "Migration second_test_migration for `default` database, datetime: 20150305154011\n" \
              "Migration default_db_test2_migration for `default` database, datetime: 20150511144100\n" \
              "Seed data test_seed for `default` database, datetime: 20150305154010\n" \
-             "Fixture test_fixture for `default` database, datetime: 20150518154012\n" \
              "Migration second_db_test_migration for `test2_db` database, datetime: 20150511144000\n"
             ).to_stdout
   end
@@ -49,7 +43,7 @@ describe 'sql scripts' do
       f.puts 'CREATE TABLE duplicated_migration(col_int1 INTEGER)'
     end
 
-    expect { SqlMigrations.list_files }.to raise_error(RuntimeError, /Duplicate time for migrations: .*/)
+    expect { SqlMigrations.scripts }.to raise_error(RuntimeError, /Duplicate time for migrations: .*/)
   end
 end
 # rubocop:enable Metrics/LineLength

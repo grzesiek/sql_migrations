@@ -10,8 +10,8 @@ describe 'seed' do
     end
     allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {} } } }
     database = SqlMigrations::Database.new(:default, adapter: :sqlite)
-    database.execute_migrations
-    database.seed_database
+    database.migrate
+    database.seed
   end
 
   it 'should be properly execute' do
