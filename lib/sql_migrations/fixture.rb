@@ -7,7 +7,7 @@ module SqlMigrations
     end
 
     def to_s
-      "Fixture #{name} for `#{@file.database}` database, datetime: #{datetime}"
+      "Fixture #{@name} for `#{@file.database}` database, datetime: #{@datetime}"
     end
   end
 end
