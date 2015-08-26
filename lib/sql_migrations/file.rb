@@ -2,7 +2,7 @@ module SqlMigrations
   # Class that represents script file
   #
   class File
-    attr_reader :name, :time, :date, :database, :type, :path
+    attr_reader :name, :time, :date, :datetime, :database, :type, :path
 
     def initialize(path, database, type)
       @path     = path
@@ -11,18 +11,23 @@ module SqlMigrations
 
       @file, @base, @parent = elements(path)
       @date, @time, @name = match(@file) if @file
+      @datetime = (@date.to_s + @time.to_s).to_i
     end
 
     def valid?
       [@name,  @time, @date, @database, directories?].all?
     end
 
-    def datetime
-      (@date.to_s + @time.to_s).to_i
-    end
-
     def content
       ::File.read(@path)
+    end
+
+    def ==(other)
+      datetime == other.datetime
+    end
+
+    def to_s
+      @file.to_s
     end
 
     private

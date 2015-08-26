@@ -49,7 +49,7 @@ describe 'sql scripts' do
       f.puts 'CREATE TABLE duplicated_migration(col_int1 INTEGER)'
     end
 
-    expect { SqlMigrations.list_files }.to raise_error(RuntimeError, /Duplicate timestamps for migrations: .*/)
+    expect { SqlMigrations.list_files }.to raise_error(RuntimeError, /Duplicate time for migrations: .*/)
   end
 end
 # rubocop:enable Metrics/LineLength

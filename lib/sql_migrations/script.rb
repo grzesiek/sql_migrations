@@ -42,31 +42,19 @@ module SqlMigrations
     end
 
     def self.find(database_name, type)
-      scripts = []
+      files = []
+
       Find.find(Dir.pwd) do |path|
         file = File.new(path, database_name, type)
-        scripts << new(file) if file.valid?
+
+        raise "Duplicate time for #{type}s: #{files.find { |f| f = file }}, #{file}" if
+          file.valid? && files.include?(file)
+
+        files << file if file.valid?
       end
 
-      raise_exception_if_duplicates_present(scripts, type)
-      scripts.sort_by(&:datetime)
-    end
-
-    private
-
-    def self.raise_exception_if_duplicates_present(scripts, type)
-      duplicates = find_duplicates(scripts)
-      files = scripts.map do |script|
-        script.path if duplicates.include?(script.date + script.time)
-      end
-
-      raise "Duplicate timestamps for #{type}s: #{files.compact.join(', ')}" unless
-            duplicates.empty?
-    end
-
-    def self.find_duplicates(scripts)
-      scripts.map { |s| s.date + s.time }.group_by { |e| e }
-        .select { |_k, v| v.size > 1 }.keys
+      files.sort_by(&:datetime)
+      files.map { |file| new(file) }
     end
 
     def new?
