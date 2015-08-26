@@ -4,8 +4,10 @@ describe 'migration' do
     File.open('/migrations/20150305_154010_test_migration.sql', 'w') do |f|
       f.puts 'CREATE TABLE test_table(col_int INTEGER, col_str STRING)'
     end
+
     allow(SqlMigrations::Config).to receive(:databases) { { default: { development: {} } } }
     @migration = SqlMigrations::Migration.find(:default).first
+    @database  = SqlMigrations::Database.new(:default, adapter: :sqlite)
   end
 
   it 'should be found and initialized' do
@@ -24,11 +26,28 @@ describe 'migration' do
     expect(@migration.name).to eql('test_migration')
   end
 
-  it 'should be properly executed' do
-    database = SqlMigrations::Database.new(:default, adapter: :sqlite)
-    database.migrate
-    expect(@sqlite_db.table_exists?(:test_table)).to be true
-    expect(@sqlite_db[:test_table].columns).to include(:col_int)
-    expect(@sqlite_db[:test_table].columns).to include(:col_str)
+  context 'executing migrations' do
+    subject { -> { @database.migrate } }
+
+    it 'should be properly executed' do
+      subject.call
+      expect(@sqlite_db.table_exists?(:test_table)).to be true
+      expect(@sqlite_db[:test_table].columns).to include(:col_int)
+      expect(@sqlite_db[:test_table].columns).to include(:col_str)
+    end
+
+    context 'invalid migration' do
+      before do
+        File.open('/migrations/20150825_184010_invalid_migration.sql', 'w') do |f|
+          f.puts 'CREATE this_is_error TABLE invalid'
+        end
+      end
+
+      it 'should print warning about invalid migration' do
+        expect { subject.call }
+          .to output(/Error while executing migration invalid_migration !/).to_stdout
+          .and raise_error(Sequel::DatabaseError)
+      end
+    end
   end
 end
