@@ -73,17 +73,15 @@ module SqlMigrations
       last = history.order(Sequel.asc(:time)).where(type: @type).last
       is_new = history.where(time: @datetime, type: @type).count == 0
 
-      if is_new && !last.nil?
-        if last[:time] > @datetime
-          raise "#{@type.capitalize} #{@name} has time BEFORE last one recorded !"
-        end
-      end
+      puts "[!] #{self} datetime BEFORE last one executed !" if
+        is_new && last && last[:time] > @datetime
+
       is_new
     end
 
     def on_success
       puts "[+] Successfully executed #{@type}, name: #{@name}"
-      puts "    #{type.capitalize} file: #{@date}_#{@time}_#{@name}.sql"
+      puts "    Info: #{self}"
       puts "    Benchmark: #{@benchmark}"
 
       @database.history.insert(time: @datetime, name: @name,
