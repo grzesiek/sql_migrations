@@ -36,6 +36,20 @@ describe 'migration' do
       expect(@sqlite_db[:test_table].columns).to include(:col_str)
     end
 
+    context 'migration datetime before last one' do
+      before do
+        subject.call
+        File.open('/migrations/20150201_200000_new_before_migration.sql', 'w') do |f|
+          f.puts 'CREATE TABLE before_table(col_int INTEGER, col_str STRING)'
+        end
+      end
+
+      it 'should print warning' do
+        expect { subject.call }
+          .to output(/datetime BEFORE last one executed !/).to_stdout
+      end
+    end
+
     context 'invalid migration' do
       before do
         File.open('/migrations/20150825_184010_invalid_migration.sql', 'w') do |f|

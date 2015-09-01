@@ -16,11 +16,13 @@ RSpec.configure do |config|
     MemFs.activate!
     # Reset configuration for every test suite
     SqlMigrations::Config.instance_eval('@databases = nil; @options = nil')
-    @stdout, $stdout = $stdout, StringIO.new # Catch STDOUT do variable
+    @stdout, $stdout = $stdout, StringIO.new unless
+      ENV['SQLMIGRATIONS_DEBUG'] # Catch STDOUT do variable
   end
 
   config.after do
-    $stdout, @stdout = @stdout, nil # Reassign STDOUT
+    $stdout, @stdout = @stdout, nil unless
+      ENV['SQLMIGRATIONS_DEBUG'] # Reassign STDOUT
     MemFs.deactivate!
   end
 end
