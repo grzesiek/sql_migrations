@@ -30,6 +30,7 @@ module SqlMigrations
         end
       rescue
         puts "[-] Error while executing #{@type} #{@name} !"
+        puts "    Info: #{self}"
         raise
       else
         true & on_success
