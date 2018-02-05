@@ -64,7 +64,7 @@ module SqlMigrations
       @driver.create_table(HISTORY_TABLE) do
         # rubocop:disable Style/SingleSpaceBeforeFirstArg
         primary_key :id
-        Bignum      :time
+        Integer     :time
         DateTime    :executed
         String      :name
         String      :type
