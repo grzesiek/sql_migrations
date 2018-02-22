@@ -26,5 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency             'bundler', '~> 1.7'
   spec.add_dependency             'rake',    '~> 10.0'
   spec.add_dependency             'sequel',  '~> 4.49.0'
+  spec.add_dependency             'mysql2',  '~> 0.4.10'
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 end
