@@ -36,7 +36,7 @@ module SqlMigrations
       _filename, _base_directory, _parent_directory =
         path.split(::File::SEPARATOR).last(3).reverse
     rescue ArgumentError => e
-      puts "Invalid path: #{path}"  
+      puts "Invalid path: #{path}"
     end
 
     def match(filename)
