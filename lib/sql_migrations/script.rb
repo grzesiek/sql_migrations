@@ -40,11 +40,11 @@ module SqlMigrations
 
     def self.find(database, type, path_migration_seed = "")
       files = []
-      temp_path_migration_seed = path_migration_seed.empty? ? Dir.pwd : path_migration_seed
+      temp_path_migration_seed = path_migration_seed.nil? || path_migration_seed.empty? ? Dir.pwd : path_migration_seed
       puts "[i] Current path `#{temp_path_migration_seed}`"
       Find.find(temp_path_migration_seed) do |path|
         file = File.new(path, database, type)
-          
+
         raise "Duplicate time for #{type}s: #{files.find { |f| f == file }}, #{file}" if
           file.valid? && files.include?(file)
 
