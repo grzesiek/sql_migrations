@@ -44,7 +44,7 @@ module SqlMigrations
       puts "[i] Current path `#{temp_path_migration_seed}`"
       Find.find(temp_path_migration_seed) do |path|
         file = File.new(path, database, type)
-          
+
         raise "Duplicate time for #{type}s: #{files.find { |f| f == file }}, #{file}" if
           file.valid? && files.include?(file)
 
