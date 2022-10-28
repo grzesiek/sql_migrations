@@ -10,6 +10,7 @@ module SqlMigrations
     def initialize(name, options)
       @name    = name
       @adapter = options[:adapter]
+      @path_migration_seed = options[:path_migration_seed]
       begin
         @driver = self.class.connect(options)
       rescue
@@ -22,7 +23,7 @@ module SqlMigrations
     end
 
     def migrate
-      migrations = Migration.find(@name)
+      migrations = Migration.find(@name, @path_migration_seed)
       if !migrations.empty?
         puts "[i] Executing migrations for `#{@name}` database"
         migrations.each { |migration| migration.execute(self) }
@@ -32,7 +33,7 @@ module SqlMigrations
     end
 
     def seed
-      seeds = Seed.find(@name)
+      seeds = Seed.find(@name, @path_migration_seed)
       if !seeds.empty?
         puts "[i] Seeding `#{@name}` database"
         seeds.each { |seed| seed.execute(self) }
