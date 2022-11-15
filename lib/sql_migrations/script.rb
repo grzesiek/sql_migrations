@@ -6,6 +6,7 @@ require 'time'
 module SqlMigrations
   # SqlScript class
   #
+
   class Script
     DELEGATED = [:name, :date, :time, :datetime, :type, :content, :path]
     attr_reader(*DELEGATED)
@@ -37,10 +38,11 @@ module SqlMigrations
       end
     end
 
-    def self.find(database, type)
+    def self.find(database, type, path_migration_seed = "")
       files = []
-
-      Find.find(Dir.pwd) do |path|
+      temp_path_migration_seed = path_migration_seed.nil? || path_migration_seed.empty? ? Dir.pwd : path_migration_seed
+      puts "[i] Current path `#{temp_path_migration_seed}`"
+      Find.find(temp_path_migration_seed) do |path|
         file = File.new(path, database, type)
 
         raise "Duplicate time for #{type}s: #{files.find { |f| f == file }}, #{file}" if
@@ -88,5 +90,7 @@ module SqlMigrations
       @database.history.insert(time: @datetime, name: @name,
                                type: @type, executed: DateTime.now)
     end
+
   end
+
 end
